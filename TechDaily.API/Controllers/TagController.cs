@@ -1,61 +1,61 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using TechDaily.Apllication.Interfaces;
 using TechDaily.Common.DTOs.Requests;
 using TechDaily.Common.DTOs.Responses;
-using TechDaily.Domain.Entities;
 
 namespace TechDaily.API.Controllers
 {
-    [Route("api/authors")]
+    [Route("api/tags")]
     [ApiController]
-    public class AuthorController : ControllerBase
+    public class TagController : ControllerBase
     {
-        private readonly IAuthorService _authorService;
+        private readonly ITagService _tagService;
 
-        public AuthorController(IAuthorService authorService)
+        public TagController(ITagService tagService)
         {
-            _authorService = authorService;
+            _tagService = tagService;
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ApiResponse<AuthorResponseDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<TagResponseDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public async Task<IActionResult> AddAuthor([FromBody] AuthorRequestDto request)
+        public async Task<IActionResult> AddTag([FromBody] TagRequestDto request)
         {
-            var response = await _authorService.AddAsync(request);
+            var response = await _tagService.AddAsync(request);
             if (response == null || response.Status == false) return BadRequest(response);
             return Ok(response);
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(ApiResponse<AuthorResponseDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<TagResponseDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult GetAllAuthors(int pageSize, int pageNumber)
+        public IActionResult GetAllArticles(int pageSize, int pageNumber)
         {
-            var response = _authorService.GetAllAuthors(pageSize, pageNumber);
+            var response = _tagService.GetAllTags(pageSize, pageNumber);
             if (response == null || response.Status == false) return BadRequest(response);
             return Ok(response);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ApiResponse<AuthorResponseDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<TagResponseDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         public async Task<IActionResult> GetById(string id)
         {
-            var response = await _authorService.GetById(id);
+            var response = await _tagService.GetById(id);
             if (response == null || response.Status == false) return BadRequest(response);
             return Ok(response);
         }
 
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
-        public async Task<IActionResult> UpdateAuthor(string id, AuthorRequestDto request)
+        public async Task<IActionResult> UpdateTag(string id, TagRequestDto request)
         {
-            await _authorService.UpdateAuthor(id, request);
+            await _tagService.UpdateTag(id, request);
             return NoContent();
         }
 
@@ -63,7 +63,7 @@ namespace TechDaily.API.Controllers
         [ProducesResponseType(204)]
         public async Task<IActionResult> Delete(string id)
         {
-            await _authorService.Delete(id);
+            await _tagService.Delete(id);
             return NoContent();
         }
     }

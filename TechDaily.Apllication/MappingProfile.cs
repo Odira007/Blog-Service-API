@@ -14,6 +14,12 @@ namespace TechDaily.Apllication
         {
             CreateMap<AuthorRequestDto, Author>();
             CreateMap<Author, AuthorResponseDto>();
+            CreateMap<CategoryRequestDto, Category>();
+            CreateMap<Category, CategoryResponseDto>();
+            CreateMap<TagRequestDto, Tag>();
+            CreateMap<Tag, TagResponseDto>();
+            CreateMap<ArticleRequestDto, Article>();
+            CreateMap<Article, ArticleResponseDto>();
         }
     }
 }

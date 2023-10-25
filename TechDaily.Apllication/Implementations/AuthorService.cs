@@ -5,6 +5,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using TechDaily.Apllication.Interfaces;
 using TechDaily.Common.DTOs.Requests;
@@ -67,6 +68,49 @@ namespace TechDaily.Apllication.Implementations
 
             return ApiResponse<PaginatedResponse<AuthorResponseDto>>
                 .Success(paginatedResponse, "Successfully retrieved authors");
+        }
+
+        public async Task<ApiResponse> GetById(string id)
+        {
+            try
+            {
+                var author = await _unitOfWork.Repository<Author>()
+                    .GetAsync(x => x.Id == id);
+                var response = _mapper.Map<AuthorResponseDto>(author);
+
+                return ApiResponse<AuthorResponseDto>
+                    .Success(response, $"Successfully retrieved author with Id:{response.Id}");
+            }
+            catch(Exception ex)
+            {
+                _logger.Error(ex, ex.Message);
+                return ApiResponse.Failure("Could not retrieve author");
+            }
+        }
+
+        public async Task UpdateAuthor(string id, AuthorRequestDto request)
+        {
+            var author = await _unitOfWork.Repository<Author>()
+                    .GetAsync(x => x.Id == id);
+            try
+            {
+                var response = _mapper.Map(request, author);
+                _unitOfWork.Repository<Author>().Update(response);
+                await _unitOfWork.CommitAsync();
+
+                _logger.Information($"Successfully updated author - {JsonConvert.SerializeObject(author)}");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, ex.Message);
+            }
+        }
+
+        public async Task Delete(string id)
+        {
+            var author = await _unitOfWork.Repository<Author>().GetAsync(x => x.Id == id);
+            _unitOfWork.Repository<Author>().Delete(author);
+            await _unitOfWork.CommitAsync();
         }
     }
 }

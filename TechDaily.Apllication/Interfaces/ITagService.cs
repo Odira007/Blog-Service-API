@@ -7,12 +7,12 @@ using TechDaily.Common.DTOs.Responses;
 
 namespace TechDaily.Apllication.Interfaces
 {
-    public interface ICategoryService
+    public interface ITagService
     {
-        Task<ApiResponse> AddAsync(CategoryRequestDto request);
-        ApiResponse<PaginatedResponse<CategoryResponseDto>> GetAllCategories(int pageSize, int pageNumber);
+        Task<ApiResponse> AddAsync(TagRequestDto request);
+        ApiResponse<PaginatedResponse<TagResponseDto>> GetAllTags(int pageSize, int pageNumber);
         Task<ApiResponse> GetById(string id);
-        Task UpdateCategory(string id, CategoryRequestDto request);
+        Task UpdateTag(string id, TagRequestDto request);
         Task Delete(string id);
     }
 }

@@ -1,61 +1,61 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using TechDaily.Apllication.Interfaces;
 using TechDaily.Common.DTOs.Requests;
 using TechDaily.Common.DTOs.Responses;
-using TechDaily.Domain.Entities;
 
 namespace TechDaily.API.Controllers
 {
-    [Route("api/authors")]
+    [Route("api/categories")]
     [ApiController]
-    public class AuthorController : ControllerBase
+    public class CategoryController : ControllerBase
     {
-        private readonly IAuthorService _authorService;
+        private readonly ICategoryService _categoryService;
 
-        public AuthorController(IAuthorService authorService)
+        public CategoryController(ICategoryService categoryService)
         {
-            _authorService = authorService;
+            _categoryService = categoryService;
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ApiResponse<AuthorResponseDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<CategoryResponseDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public async Task<IActionResult> AddAuthor([FromBody] AuthorRequestDto request)
+        public async Task<IActionResult> AddCategory([FromBody] CategoryRequestDto request)
         {
-            var response = await _authorService.AddAsync(request);
+            var response = await _categoryService.AddAsync(request);
             if (response == null || response.Status == false) return BadRequest(response);
             return Ok(response);
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(ApiResponse<AuthorResponseDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<CategoryResponseDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult GetAllAuthors(int pageSize, int pageNumber)
+        public IActionResult GetAllCategories(int pageSize, int pageNumber)
         {
-            var response = _authorService.GetAllAuthors(pageSize, pageNumber);
+            var response = _categoryService.GetAllCategories(pageSize, pageNumber);
             if (response == null || response.Status == false) return BadRequest(response);
             return Ok(response);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ApiResponse<AuthorResponseDto>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<CategoryResponseDto>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         public async Task<IActionResult> GetById(string id)
         {
-            var response = await _authorService.GetById(id);
+            var response = await _categoryService.GetById(id);
             if (response == null || response.Status == false) return BadRequest(response);
             return Ok(response);
         }
 
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
-        public async Task<IActionResult> UpdateAuthor(string id, AuthorRequestDto request)
+        public async Task<IActionResult> UpdateCategory(string id, CategoryRequestDto request)
         {
-            await _authorService.UpdateAuthor(id, request);
+            await _categoryService.UpdateCategory(id, request);
             return NoContent();
         }
 
@@ -63,7 +63,7 @@ namespace TechDaily.API.Controllers
         [ProducesResponseType(204)]
         public async Task<IActionResult> Delete(string id)
         {
-            await _authorService.Delete(id);
+            await _categoryService.Delete(id);
             return NoContent();
         }
     }

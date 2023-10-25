@@ -23,7 +23,6 @@ namespace TechDaily.Common.DTOs.Responses
     public class ApiResponse<T> : ApiResponse
     {
         public T Data { get; set; }
-
         public static ApiResponse<T> Success(T data, string message)
         {
             return new ApiResponse<T> { Status = true, Message = message, Data = data };
